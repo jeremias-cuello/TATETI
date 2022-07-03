@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TATETI</title>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="titulo">
+        <p class="titulo__titulo">TATETI</p>
+      </div>
+      <div class="inputs">
+        <span class="contenedor-input">
+          <label class="contenedor-input__label" for="jugador1"> X </label>
+          <input class="contenedor-input__input" type="text" name="jugador1" id="jugador1">
+        </span>
+        <span class="contenedor-input">
+          <label class="contenedor-input__label" for="jugador2"> O </label>
+          <input class="contenedor-input__input" type="text" name="jugador2" id="jugador2">
+        </span>
+      </div>
+      <div class="contenedor">
+        <table>
+          <tbody>
+          <tr>
+            <td>                       <button class="button-option"></button></td>
+            <td class=" medioVertical"><button class="button-option"></button></td>
+            <td>                       <button class="button-option"></button></td>
+          </tr>
+          <tr>
+            <td class="medioHorizontal">              <button class="button-option"></button>
+            <td class="medioVertical medioHorizontal"><button class="button-option"></button></td>
+            <td class="medioHorizontal">              <button class="button-option"></button></td>
+          </tr>
+          <tr>
+            <td>                       <button class="button-option"></button></td>
+            <td class=" medioVertical"><button class="button-option"></button></td>
+            <td>                       <button class="button-option"></button></td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="desplegar hide">
+        <button class="botones" id="restart">Reiniciar</button>
+        <button id="new-game" class="botones" >Nueva partida</button>
+        <p id="message"></p>
+      </div>
+    </div>
+  </body>
+  <script>
+    var ESTADO = true;
+
+    // boton_XO -> ArregloHTML
+    let jugador1 = document.getElementById("jugador1");
+    let jugador2 = document.getElementById("jugador2");
+    let boton_XO = document.querySelectorAll(".button-option");
+    let ref_desplegar = document.querySelector(".desplegar");
+    let btn_nuevaPartida = document.getElementById("new-game");
+    let btn_reiniciar = document.getElementById("restart");
+    let msgRef = document.getElementById("message");
+    
+    //Player 'X' plays first
+    let xTurn = true;
+    let count = 0;
+
+    //Desactivar Todos los botones
+    const desactivarBotones = () => {
+      boton_XO.forEach((element) => (element.disabled = true));
+      //Activar desplegar
+      ref_desplegar.classList.remove("hide");
+    };
+
+    //Activar todos los botones (Para NuevaPartida y Reiniciar)
+    const habilitarBotones = () => {
+      boton_XO.forEach((element) => {
+        element.innerText = "";
+        element.disabled = false;
+      });
+      //Desactivar desplegar
+      ref_desplegar.classList.add("hide");
+    };
+
+    var eliminarMsg;
+
+    //Funcion cuando gana
+    const Ganar = (letter) => {
+      desactivarBotones();
+      if(letter === "X")
+        msgRef.innerHTML = `${jugador1.value}"${letter}" Gana &#x1F389;`;
+      else if(letter === "O")
+        msgRef.innerHTML = `${jugador2.value}"${letter}" Gana &#x1F389;`;
+
+      eliminarMsg = setTimeout(() => {msgRef.innerHTML = "";}, 5*1000);
+      
+      console.log(letter);
+    };
+
+    //Funcion por empate
+    const empateFuncion = () => {
+      desactivarBotones();
+      msgRef.innerHTML = "&#x1F60E; Empate.";
+      eliminarMsg = setTimeout(() => {msgRef.innerHTML = "";}, 5*1000);
+    };
+
+    //New Game
+    btn_nuevaPartida.addEventListener("click", () => {
+      count = 0;
+      habilitarBotones();
+    });
+    btn_reiniciar.addEventListener("click", () => {
+      count = 0;
+      habilitarBotones();
+    });
+
+    //Arreglo del patron ganador
+    /* [0][1][2] */
+    /* [3][4][5] */
+    /* [6][7][8] */
+    let patronGanador = [
+      [0, 1, 2],
+      [0, 3, 6],
+      [2, 5, 8],
+      [6, 7, 8],
+      [3, 4, 5],
+      [1, 4, 7],
+
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    
+    //Win Logic
+    const winChecker = () => {
+      //recorre todos los patrones ganadores
+      console.clear();
+
+      for (let i of patronGanador) {
+        
+        //desestructuracion
+        let [element1, element2, element3] = [
+          boton_XO[i[0]].innerText,
+          boton_XO[i[1]].innerText,
+          boton_XO[i[2]].innerText,
+        ];
+        //Chequeo si los elementos son llenados
+        //If 3 empty elements are same and would give win as would
+        //Si 3 elementos vacíos son iguales y darían ganancia como lo haría
+        console.log( i + " -> [" + element1 + "]", "[" +  element2 + "]", "[" + element3 + "]");
+        
+        if (element1 != "" && (element2 != "") & (element3 != "")) {
+          if (element1 == element2 && element2 == element3) {
+            //If all 3 buttons have same values then pass the value to Ganar
+            Ganar(element1);
+          }
+        }
+      }
+    };
+    
+    //Display X/O on click
+    boton_XO.forEach((element) => {
+      element.addEventListener("click", () => {
+        if (xTurn) {
+          xTurn = false;
+          //Display X
+          element.innerText = "X";
+          element.disabled = true;
+        } else {
+          xTurn = true;
+          //Display Y
+          element.innerText = "O";
+          element.disabled = true;
+        }
+        //Increment count on each click
+        count += 1;
+        if (count == 9) {
+          empateFuncion();
+        }
+        //Check for win on every click
+        winChecker();
+      });
+    });
+
+    //Habilitar Botones y Desactivar desplegar en la carga de la pagina.
+    window.onload = habilitarBotones;
+  </script>
+</html>
