@@ -7,118 +7,118 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <div class="wrapper">
-      <div class="titulo">
-        <p class="titulo__titulo">TATETI</p>
-      </div>
-      <div class="inputs">
-        <span class="contenedor-input">
-          <label class="contenedor-input__label" for="jugador1"> X </label>
-          <input class="contenedor-input__input" type="text" name="jugador1" id="jugador1">
+    <div class="container">
+      
+      <p class="container__title">TATETI</p>
+      
+      <div class="namesPlayers">
+        <span class="namesPlayers__box">
+          <label class="namesPlayers__label" for="player1"> X </label>
+          <input class="namesPlayers__input" id="player1" type="text">
         </span>
-        <span class="contenedor-input">
-          <label class="contenedor-input__label" for="jugador2"> O </label>
-          <input class="contenedor-input__input" type="text" name="jugador2" id="jugador2">
+        <span class="namesPlayers__box">
+          <label class="namesPlayers__label" for="player2"> O </label>
+          <input class="namesPlayers__input" id="player2" type="text">
         </span>
       </div>
-      <div class="contenedor">
-        <table>
-          <tbody>
-          <tr>
-            <td>                       <button class="button-option"></button></td>
-            <td class=" medioVertical"><button class="button-option"></button></td>
-            <td>                       <button class="button-option"></button></td>
-          </tr>
-          <tr>
-            <td class="medioHorizontal">              <button class="button-option"></button>
-            <td class="medioVertical medioHorizontal"><button class="button-option"></button></td>
-            <td class="medioHorizontal">              <button class="button-option"></button></td>
-          </tr>
-          <tr>
-            <td>                       <button class="button-option"></button></td>
-            <td class=" medioVertical"><button class="button-option"></button></td>
-            <td>                       <button class="button-option"></button></td>
-          </tr>
-        </tbody>
+      <div class="tateti">
+        <table class="tateti__tabla">
+          <tbody class="tateti__tabla-body">
+            <tr class="tateti__tabla-fila">
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+            </tr>
+            <tr class="tateti__tabla-fila">
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+            </tr>
+            <tr class="tateti__tabla-fila">
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
+            </tr>
+          </tbody>
         </table>
+        <p class="tateti__message"></p>
       </div>
-      <div class="desplegar hide">
-        <button class="botones" id="restart">Reiniciar</button>
-        <button id="new-game" class="botones" >Nueva partida</button>
-        <p id="message"></p>
+      <div class="options">
+        <button class="options__button"> Reiniciar </button>
+        <button class="options__button"> Nueva partida </button>
       </div>
     </div>
   </body>
-  <script>
-    var ESTADO = true;
 
-    // boton_XO -> ArregloHTML
-    let jugador1 = document.getElementById("jugador1");
-    let jugador2 = document.getElementById("jugador2");
-    let boton_XO = document.querySelectorAll(".button-option");
-    let ref_desplegar = document.querySelector(".desplegar");
-    let btn_nuevaPartida = document.getElementById("new-game");
-    let btn_reiniciar = document.getElementById("restart");
-    let msgRef = document.getElementById("message");
+  <script>
+    var state = true;
+
+    // button_XO -> ArregloHTML
+    let player1 = document.getElementById("player1");
+    let player2 = document.getElementById("player2");
+    let button_XO = document.querySelectorAll(".tateti__button");
+    let message = document.querySelector(".tateti__message");
+    let btn_newGame = document.getElementById("options__button-newGame");
+    let btn_restart = document.getElementById("restart");
     
     //Player 'X' plays first
     let xTurn = true;
     let count = 0;
 
     //Desactivar Todos los botones
-    const desactivarBotones = () => {
-      boton_XO.forEach((element) => (element.disabled = true));
+    const disabledButtons = () => {
+      button_XO.forEach((element) => (element.disabled = true));
       //Activar desplegar
-      ref_desplegar.classList.remove("hide");
+      message.classList.remove("hide");
     };
 
     //Activar todos los botones (Para NuevaPartida y Reiniciar)
-    const habilitarBotones = () => {
-      boton_XO.forEach((element) => {
+    const enableButtons = () => {
+      button_XO.forEach((element) => {
         element.innerText = "";
         element.disabled = false;
       });
       //Desactivar desplegar
-      ref_desplegar.classList.add("hide");
+      message.classList.add("hide");
     };
 
-    var eliminarMsg;
+    var deletemessage;
 
     //Funcion cuando gana
-    const Ganar = (letter) => {
-      desactivarBotones();
+    const Win = (letter) => {
+      disabledButtons();
       if(letter === "X")
-        msgRef.innerHTML = `${jugador1.value}"${letter}" Gana &#x1F389;`;
+        message.innerHTML = `${player1.value}"${letter}" Gana &#x1F389;`;
       else if(letter === "O")
-        msgRef.innerHTML = `${jugador2.value}"${letter}" Gana &#x1F389;`;
+        message.innerHTML = `${player2.value}"${letter}" Gana &#x1F389;`;
 
-      eliminarMsg = setTimeout(() => {msgRef.innerHTML = "";}, 5*1000);
+      deletemessage = setTimeout(() => {message.innerHTML = "";}, 5*1000);
       
       console.log(letter);
     };
 
     //Funcion por empate
-    const empateFuncion = () => {
-      desactivarBotones();
-      msgRef.innerHTML = "&#x1F60E; Empate.";
-      eliminarMsg = setTimeout(() => {msgRef.innerHTML = "";}, 5*1000);
+    const Tie = () => {
+      disabledButtons();
+      message.innerHTML = "&#x1F60E; Empate.";
+      deletemessage = setTimeout(() => {message.innerHTML = "";}, 5*1000);
     };
 
     //New Game
-    btn_nuevaPartida.addEventListener("click", () => {
+    btn_newGame.addEventListener("click", () => {
       count = 0;
-      habilitarBotones();
+      enableButtons();
     });
-    btn_reiniciar.addEventListener("click", () => {
+    btn_restart.addEventListener("click", () => {
       count = 0;
-      habilitarBotones();
+      enableButtons();
     });
 
     //Arreglo del patron ganador
     /* [0][1][2] */
     /* [3][4][5] */
     /* [6][7][8] */
-    let patronGanador = [
+    let winningPattern = [
       [0, 1, 2],
       [0, 3, 6],
       [2, 5, 8],
@@ -131,34 +131,34 @@
     ];
     
     //Win Logic
-    const winChecker = () => {
+    const WinChecker = () => {
       //recorre todos los patrones ganadores
       console.clear();
 
-      for (let i of patronGanador) {
+      for (let i of winningPattern) {
         
         //desestructuracion
         let [element1, element2, element3] = [
-          boton_XO[i[0]].innerText,
-          boton_XO[i[1]].innerText,
-          boton_XO[i[2]].innerText,
+          button_XO[i[0]].innerText,
+          button_XO[i[1]].innerText,
+          button_XO[i[2]].innerText,
         ];
         //Chequeo si los elementos son llenados
-        //If 3 empty elements are same and would give win as would
+        //If 3 empty elements are same and would give Win as would
         //Si 3 elementos vacíos son iguales y darían ganancia como lo haría
         console.log( i + " -> [" + element1 + "]", "[" +  element2 + "]", "[" + element3 + "]");
         
         if (element1 != "" && (element2 != "") & (element3 != "")) {
           if (element1 == element2 && element2 == element3) {
-            //If all 3 buttons have same values then pass the value to Ganar
-            Ganar(element1);
+            //If all 3 buttons have same values then pass the value to Win
+            Win(element1);
           }
         }
       }
     };
     
     //Display X/O on click
-    boton_XO.forEach((element) => {
+    button_XO.forEach((element) => {
       element.addEventListener("click", () => {
         if (xTurn) {
           xTurn = false;
@@ -174,14 +174,14 @@
         //Increment count on each click
         count += 1;
         if (count == 9) {
-          empateFuncion();
+          Tie();
         }
-        //Check for win on every click
-        winChecker();
+        //Check for Win on every click
+        WinChecker();
       });
     });
 
     //Habilitar Botones y Desactivar desplegar en la carga de la pagina.
-    window.onload = habilitarBotones;
+    window.onload = enableButtons;
   </script>
 </html>
