@@ -1,10 +1,5 @@
 var time = setInterval(() => {
-    if(state){
-        document.body.style.background = `repeating-linear-gradient(rgb(122, 190, 230), rgb(230, 112, 194))`;
-    state = false;
-}
-else{
-    document.body.style.background = `repeating-linear-gradient(rgb(230, 112, 194), rgb(122, 190, 230))`;
-    state = true;
-}
+    
+    document.body.style.background ? (state) `repeating-linear-gradient(var(--colorBody_2), var(--colorBody_1))` : `repeating-linear-gradient(var(--colorBody_1), var(--colorBody_2))`;
+
 }, 1000);
