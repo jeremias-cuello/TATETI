@@ -13,7 +13,7 @@ body{
     background: repeating-linear-gradient(var(--colorBody_2), var(--colorBody_1));
 }
 
-label{
+label, button{
     cursor: pointer;
 }
 
