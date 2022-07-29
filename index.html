@@ -1,187 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>TATETI</title>
-    <script src="js/main.js"></script>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel='stylesheet' href='css/main.css'>
   </head>
   <body>
-    <div class="container">
+    <div class='container'>
+      <p class='container__title'>TATETI</p>
       
-      <p class="container__title">TATETI</p>
-      
-      <div class="namesPlayers">
-        <span class="namesPlayers__box">
-          <label class="namesPlayers__label" for="player1"> X </label>
-          <input class="namesPlayers__input" id="player1" type="text">
+      <div class='namesPlayers'>
+        <span class='namesPlayers__box'>
+          <label class='namesPlayers__label' for='player.x'> X </label>
+          <input class='namesPlayers__input' id='player.x' type='text'>
         </span>
-        <span class="namesPlayers__box">
-          <label class="namesPlayers__label" for="player2"> O </label>
-          <input class="namesPlayers__input" id="player2" type="text">
+        <span class='namesPlayers__box'>
+          <label class='namesPlayers__label' for='player.o'> O </label>
+          <input class='namesPlayers__input' id='player.o' type='text'>
         </span>
       </div>
-      <div class="tateti">
-        <table class="tateti__tabla">
-          <tbody class="tateti__tabla-body">
-            <tr class="tateti__tabla-fila">
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-            </tr>
-            <tr class="tateti__tabla-fila">
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-            </tr>
-            <tr class="tateti__tabla-fila">
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-              <td class="tateti__tabla-columna"> <button class="tateti__button"></button> </td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="tateti__message"></p>
+
+      <p style="margin-top: -15px; color: rgb(83, 83, 83); Arial; font-size: 13px;">Siempre empieza la X</p>
+
+      <div class='tateti tateti__buttons'>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
+          <button class='tateti__button buttons-disabled'></button>
       </div>
-      <div class="options">
-        <button class="options__button"> Reiniciar </button>
-        <button class="options__button"> Nueva partida </button>
+
+      <p class='container__message'></p>
+      
+      <div class='options'>
+        <button class='options__button restart'> De vuelta </button>
+        <button class='options__button-start'></button>
+        <button class='options__button newGame'> Otro Juego </button>
       </div>
     </div>
-  </body>
 
-  <script>
-    var state = true;
-
-    // button_XO -> ArregloHTML
-    let player1 = document.getElementById("player1");
-    let player2 = document.getElementById("player2");
-    let button_XO = document.querySelectorAll(".tateti__button");
-    let message = document.querySelector(".tateti__message");
-    let btn_newGame = document.getElementById("options__button-newGame");
-    let btn_restart = document.getElementById("restart");
+    <script src="js/main.js"></script>
     
-    //Player 'X' plays first
-    let xTurn = true;
-    let count = 0;
+  </body>
+  
+  <script>
+    
+    var buttonStart = document.querySelector('.options__button-start');
+    buttonStart.addEventListener('click', Start);
 
-    //Desactivar Todos los botones
-    const disabledButtons = () => {
-      button_XO.forEach((element) => (element.disabled = true));
-      //Activar desplegar
-      message.classList.remove("hide");
+    // player is an HTML element input
+    let player = {
+      x: document.getElementById('player.x'),
+      o: document.getElementById('player.o')
+    };
+     
+    // buttons is an HTML element button array
+    let buttons = document.querySelectorAll('.tateti__button');
+
+    // message es un HTML element p
+    let message = document.querySelector('.container__message');
+    
+    let optionsButtons = {
+      newGame: document.querySelector('.newGame'),
+      restart: document.querySelector('.restart')
     };
 
-    //Activar todos los botones (Para NuevaPartida y Reiniciar)
-    const enableButtons = () => {
-      button_XO.forEach((element) => {
-        element.innerText = "";
-        element.disabled = false;
-      });
-      //Desactivar desplegar
-      message.classList.add("hide");
-    };
-
-    var deletemessage;
-
-    //Funcion cuando gana
-    const Win = (letter) => {
-      disabledButtons();
-      if(letter === "X")
-        message.innerHTML = `${player1.value}"${letter}" Gana &#x1F389;`;
-      else if(letter === "O")
-        message.innerHTML = `${player2.value}"${letter}" Gana &#x1F389;`;
-
-      deletemessage = setTimeout(() => {message.innerHTML = "";}, 5*1000);
+    function Validate(){
+      let validated = (player.x.value != '' && player.o.value != '');
       
-      console.log(letter);
-    };
+      DisabledButtons(!validated);
 
-    //Funcion por empate
+      if(!validated){
+        alert('Debe ingresar los nombre de los jugadores.');
+      }
+
+      return validated;
+    }
+
+    const DisabledButtons = (disabled) => {
+      
+      buttons.forEach((button) => {
+        
+        button.disabled = disabled;
+        
+        if(disabled)
+          button.classList.add('buttons-disabled');
+        else
+          button.classList.remove('buttons-disabled');
+      });
+    }
+
+    const Win = (letter) => {
+      
+      DisabledButtons(true);
+      message.classList.add('container__message-win');
+      message.classList.remove('container__message-tie');
+
+      if(letter === 'X')
+        message.innerHTML = `${player.x.value} Gana &#x1F389;`;
+      else if(letter === 'O')
+        message.innerHTML = `${player.o.value} Gana &#x1F389;`;
+
+      DeleteMesseage = setTimeout(() => {message.innerHTML = '';}, 3*1000);
+    }
+
     const Tie = () => {
-      disabledButtons();
-      message.innerHTML = "&#x1F60E; Empate.";
-      deletemessage = setTimeout(() => {message.innerHTML = "";}, 5*1000);
-    };
 
-    //New Game
-    btn_newGame.addEventListener("click", () => {
-      count = 0;
-      enableButtons();
-    });
-    btn_restart.addEventListener("click", () => {
-      count = 0;
-      enableButtons();
-    });
+      DisabledButtons(true);
+      message.classList.add('container__message-tie');
+      message.classList.remove('container__message-win');
+      message.innerHTML = '&#x1F60E; Empate.';
+
+      DeleteMesseage = setTimeout(() => {message.innerHTML = '';}, 5*1000);
+    }
+
+    const DeletePlayers = () => {
+      player.x.value = '';
+      player.o.value = '';
+    }
+    
+    const DeleteButtons = () => {
+      buttons.forEach(button => {
+        button.innerHTML = '';
+      });
+    }
+    function NewGame(){
+      clickCounter = 0;
+      DisabledButtons(true);
+      DeletePlayers();
+      DeleteButtons();
+      optionsButtons.restart.disabled = true;
+      buttonStart.style.display = 'block';
+    }
+
+    function Restart(){
+      clickCounter = 0;
+      DeleteButtons();
+      DisabledButtons(false);
+      xTurn = true;
+      buttonStart.style.display = 'none';
+    }
+
+    function Start(){
+      xTurn = true;
+
+      if(Validate()){
+        buttonStart.style.display = 'none';
+        optionsButtons.restart.disabled = false;
+        buttons[0].focus();
+      }
+    }
+    
+    optionsButtons.newGame.addEventListener('click', NewGame);
+    optionsButtons.restart.addEventListener('click', Restart);
 
     //Arreglo del patron ganador
     /* [0][1][2] */
     /* [3][4][5] */
     /* [6][7][8] */
     let winningPattern = [
-      [0, 1, 2],
-      [0, 3, 6],
-      [2, 5, 8],
-      [6, 7, 8],
-      [3, 4, 5],
-      [1, 4, 7],
+      [0, 1, 2], // horizontal higher
+      [3, 4, 5], // horizontal middle
+      [6, 7, 8], // horizontal lower
 
-      [0, 4, 8],
-      [2, 4, 6],
+      [0, 3, 6], // vertical left
+      [2, 5, 8], // vertical right
+      [1, 4, 7], // vertical middle
+
+      [0, 4, 8], // diagonal
+      [2, 4, 6], // diagonal
     ];
     
-    //Win Logic
     const WinChecker = () => {
-      //recorre todos los patrones ganadores
-      console.clear();
-
+      
+      // Resumen: Este metodo recorre todos los patrones ganadores
+      
       for (let i of winningPattern) {
         
         //desestructuracion
-        let [element1, element2, element3] = [
-          button_XO[i[0]].innerText,
-          button_XO[i[1]].innerText,
-          button_XO[i[2]].innerText,
+        let [letter1, letter2, letter3] = [
+          buttons[i[0]].innerText,
+          buttons[i[1]].innerText,
+          buttons[i[2]].innerText,
         ];
         //Chequeo si los elementos son llenados
         //If 3 empty elements are same and would give Win as would
         //Si 3 elementos vacíos son iguales y darían ganancia como lo haría
-        console.log( i + " -> [" + element1 + "]", "[" +  element2 + "]", "[" + element3 + "]");
         
-        if (element1 != "" && (element2 != "") & (element3 != "")) {
-          if (element1 == element2 && element2 == element3) {
+        if ((letter1 != '') && (letter2 != '') & (letter3 != '')) {
+          if (letter1 == letter2 && letter2 == letter3) {
             //If all 3 buttons have same values then pass the value to Win
-            Win(element1);
+            Win(letter1);
           }
         }
       }
     };
     
-    //Display X/O on click
-    button_XO.forEach((element) => {
-      element.addEventListener("click", () => {
+    
+    var xTurn = true;
+    var clickCounter = 0;
+    
+    // button handlers
+    buttons.forEach((button) => {
+      button.addEventListener('click', (e) => {
         if (xTurn) {
           xTurn = false;
-          //Display X
-          element.innerText = "X";
-          element.disabled = true;
+          
+          button.innerText = 'X';
         } else {
           xTurn = true;
-          //Display Y
-          element.innerText = "O";
-          element.disabled = true;
+          
+          button.innerText = 'O';
         }
-        //Increment count on each click
-        count += 1;
-        if (count == 9) {
+        button.disabled = true;
+        
+        clickCounter += 1;
+
+        if (clickCounter == 9) {
           Tie();
         }
+
         //Check for Win on every click
         WinChecker();
       });
     });
 
     //Habilitar Botones y Desactivar desplegar en la carga de la pagina.
-    window.onload = enableButtons;
+    window.onload = () =>{
+      player.x.focus();
+      NewGame();
+    };
   </script>
 </html>
