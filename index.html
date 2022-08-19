@@ -1,52 +1,66 @@
 <!DOCTYPE html>
 <html lang='en'>
-  <head>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>TATETI</title>
-    <link rel='stylesheet' href='css/main.css'>
-    <link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyEPuT407SUnuA7lh7v01my7YSBXhSIQMG9ctCTbjybPaW-4BWeagGL8UXgndcTwS0LHc&usqp=CAU">
-  </head>
-  <body>
-    <div class='container'>
-      <p class='container__title'>TATETI</p>
-      
-      <div class='namesPlayers'>
-        <span class='namesPlayers__box'>
-          <label class='namesPlayers__label' for='player.x'> X </label>
-          <input class='namesPlayers__input' id='player.x' type='text'>
-        </span>
-        <span class='namesPlayers__box'>
-          <label class='namesPlayers__label' for='player.o'> O </label>
-          <input class='namesPlayers__input' id='player.o' type='text'>
-        </span>
-      </div>
-
-      <p style="margin-top: -15px; color: rgb(83, 83, 83); Arial; font-size: 13px;">Siempre empieza la X</p>
-
-      <div class='tateti tateti__buttons'>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-          <button class='tateti__button buttons-disabled'></button>
-      </div>
-
-      <p class='container__message'></p>
-      
-      <div class='options'>
-        <button class='options__button restart'> De vuelta </button>
-        <button class='options__button-start'></button>
-        <button class='options__button newGame'> Otro Juego </button>
-      </div>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>TATETI</title>
+  <link rel='stylesheet' href='css/main.css'>
+  <link rel="shortcut icon" href="img/shortIconTateti.jpg">
+</head>
+<body>
+  <div class='container'>
+    <p class='container__title'>TATETI</p>
+    
+    <div class='namesPlayers'>
+      <span class='namesPlayers__box'>
+        <label class='namesPlayers__label' for='player.x'> X </label>
+        <input class='namesPlayers__input' id='player.x' type='text'>
+      </span>
+      <span class='namesPlayers__box'>
+        <label class='namesPlayers__label' for='player.o'> O </label>
+        <input class='namesPlayers__input' id='player.o' type='text'>
+      </span>
     </div>
 
-    <script src="js/main.js"></script>
+    <p style="margin-top: -15px; color: rgb(83, 83, 83); Arial; font-size: 13px;">Siempre empieza la X</p>
+
+    <div class='tateti tateti__buttons'>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+      <button class='tateti__button buttons-disabled'></button>
+    </div>
+
+    <p class='container__message'></p>
     
-  </body>
+    <div class='options'>
+      <button class='options__button restart'> De vuelta </button>
+      <button class='options__button-start'></button>
+      <button class='options__button newGame'> Otro Juego </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="links">
+      <a class="links__link" href="https://github.com/Jeremias0901" target="_blank">
+        <img class="links__img" src="img/github.svg" alt="GitHub Jeremias0901" width="35px">
+        Mi cuenta
+      </a>
+      <a class="links__link" href="https://github.com/Jeremias0901/TATETI.github.io" target="_blank">
+        <img class="links__img" src="img/github.svg" alt="GitHub Jeremias0901 TATETI" width="35px">
+        Este tateti
+      </a>
+      <a class="links__link" href="https://mail.google.com/mail/u/0/?tf=cm&fs=1&source=mailto&to=cuellojeremiasnatanael@gmail.com&body=Hola%2c+te+contacto+desde+el+TATETI." target="_blank">
+        <img class="links__img" src="img/email.svg" alt="Email Jeremias Natanael Cuello - Jeremias0901" width="50px">
+      </a>
+    </div>
+  </footer>
+  
+</body>
   
   <script>
     
@@ -77,6 +91,7 @@
 
       if(!validated){
         alert('Debe ingresar los nombre de los jugadores.');
+        player.x.focus();
       }
 
       return validated;
@@ -106,6 +121,7 @@
       else if(letter === 'O')
         message.innerHTML = `${player.o.value} Gana &#x1F389;`;
 
+      optionsButtons.restart.focus();
       DeleteMesseage = setTimeout(() => {message.innerHTML = '';}, 3*1000);
     }
 
@@ -136,6 +152,7 @@
       DeleteButtons();
       optionsButtons.restart.disabled = true;
       buttonStart.style.display = 'block';
+      player.x.focus();
     }
 
     function Restart(){
@@ -144,6 +161,7 @@
       DisabledButtons(false);
       xTurn = true;
       buttonStart.style.display = 'none';
+      buttons[0].focus();
     }
 
     function Start(){
